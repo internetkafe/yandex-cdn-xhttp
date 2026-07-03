@@ -1,0 +1,80 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "dns": {
+    "servers": [
+      "1.1.1.1",
+      "8.8.8.8"
+    ]
+  },
+  "inbounds": [
+    {
+      "tag": "cdn-tw-russia",
+      "port": 8185,
+      "listen": "127.0.0.1",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "sockopt": {
+          "tcpNoDelay": true
+        },
+        "xhttpSettings": {
+          "mode": "packet-up",
+          "path": "/rpc-cdn",
+          "xmux": {
+            "cMaxLifetimeMs": 0,
+            "cMaxReuseTimes": "36-96",
+            "maxConcurrency": "8-32",
+            "maxConnections": 0,
+            "hMaxRequestTimes": "320-640",
+            "hMaxReusableSecs": "720-1800"
+          },
+          "extra": {
+            "sessionPlacement": "query",
+            "sessionIDPlacement": "query",
+            "seqPlacement": "query",
+            "sessionKey": "auth",
+            "sessionIDKey": "auth",
+            "seqKey": "id",
+            "sessionIDTable": "alphabet",
+            "sessionIDLength": "20",
+            "noSSEHeader": true,
+            "uplinkHTTPMethod": "GET",
+            "uplinkDataKey": "X-Ver",
+            "uplinkDataPlacement": "body",
+            "xPaddingObfsMode": true,
+            "xPaddingMethod": "tokenish",
+            "xPaddingPlacement": "query",
+            "xPaddingHeader": "api_v1",
+            "xPaddingKey": "xss",
+            "xPaddingBytes": "100-1000",
+            "scStreamUpServerSecs": "20-80"
+          }
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "DIRECT",
+      "protocol": "freedom"
+    },
+    {
+      "tag": "BLOCK",
+      "protocol": "blackhole"
+    }
+  ]
+}
